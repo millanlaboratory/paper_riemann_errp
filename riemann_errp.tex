@@ -124,80 +124,83 @@ Despite the high performance in sterile laboratory
 conditions, the challenge to bring EEG-based BCI to real life
 still remains. In this paper we explore popular approaches to decode ERPs
 which are often challenged by temporal variability of single trials.
-
 An Event-Related Potential is a brain response to an external event.
-ERP waveforms consist of multiple components characterized
-by a particular latency, polarity and spatial distribution \cite{duncan_event-related_2009}.
-As opposed to Evoked Potentials triggered by a simple sensory stimulation,
-ERPs are generally associated with higher cognitive processing
-and, therefore, increased latency. The latency is not only greater, it can
-vary across different yet similar tasks and become variable
-at challenging tasks \cite{arico_evaluation_2013}. This inconsistency complicates the decoding of
-ERP on single trials. Thus, the interaction
-protocol needs to be carefully adjusted and the decoding
-algorithm finely tuned for each scenario \cite{iturrate_task-dependent_2013}.
-
-The most widely used ERPs in BCI include P300 and ErrP.
-They both reflect a cognitive process of evaluation.
+The most widely used ERPs in BCI include P300 and ErrP which
+reflect a cognitive process of event evaluation.
 P300 is elicited upon presentation of a rare stimuli in the oddball paradigm
 and it is associated with stimulus categorization whereas
 ErrP is observed when errors are committed by the user, other people or machines.
 
-ErrP was shown to keep a consistent waveform across protocols
-while having systematic difference in latency \cite{iturrate_latency_2014-1}.
-A linear classifier
-based on waveform features cannot cope with it when trained and applied
-on different datasets, the performance drops to random level
-for considerable latency shifts. However, a simple correction of 
-the latency allows to recover the performance up to the level
-obtained within the single protocol dataset.
+For BCI application ERPs are classified into one of the two categories 
+based on the EEG signal generated after the event.
+ERP waveforms consist of multiple components characterized
+by a particular latency, polarity and spatial distribution \cite{duncan_event-related_2009}.
+One of the classical approaches to decode ERPs is to 
+use the signal amplitude at specific time points and channels as features
+for a binary classifier.
+As opposed to Evoked Potentials triggered by a simple sensory stimulation,
+ERPs are generally associated with higher cognitive processing
+and, therefore, increased latency. The latency is not only greater, it can
+vary across different yet similar tasks and become variable
+at challenging tasks \cite{arico_evaluation_2013}. 
+This inconsistency complicates the decoding of ERP on single trials.
+Thus, the interaction
+protocol needs to be carefully adjusted and the decoding
+algorithm finely tuned for each scenario \cite{iturrate_task-dependent_2013}.
 
-In this study we explore the robustness of covariance-derived features
-in decoding ERPs to the various perturbations of latency
-and compare them with more traditional temporal waveform features.
-Spatial covariance of EEG provides non-linear transformation
-of underlying signal and emphasizes the pair-wise interaction
+Another way to process ERP signal is to extract features based on spatial covariance matrices
+which emphasize the pair-wise interaction
 between channels and the total variance of single channels.
-Although one can use the values from covariance matrix
-directly as features for the classifier \cite{tomioka_classifying_2007}, Euclidean geometry is not 
-suitable to describe their relationships \cite{arsigny_geometric_2007}. 
-Since they are 
-Symmetric Positive Definite matrices (SPD),
-they are better characterized in terms of Riemannian geometry.
-
-The Riemannian geometry on covariance matrices has proven
-to provide performance compared to other frequently used
-approaches in BCI, e.g. temporal features or 
+Covariance matrices can be used directly \cite{tomioka_classifying_2007}, but
+they are typically transformed by means of Riemannian geometry 
+\cite{barachant_classification_2013, zanini_transfer_2018}.
+It has proven to provide performance compared to other frequently used
+approaches in BCI, e.g. waveform features or 
 features extracted with CSP \cite{blankertz_optimizing_2008}.
-It shows promising
-results in generalization across sessions \cite{barachant_classification_2013}
-and transfer learning across subjects \cite{zanini_transfer_2018}.
-Since ERPs are described as components with particular topography,
-amplitude and latency, one of the disadvantages of
+One of the disadvantages of
 EEG spatial covariance matrix is the loss of precise temporal dynamics.
 A typical solution against this problem is to augment the matrix
 with the covariances between single trial and a preselected template,
 e.g. an averaged ERP of one of the classes \cite{congedo_new_2013,barachant_plug&play_2014}.
 
-We explore the robustness of different feature sets to the variability
-in temporal dynamics of ERPs. It may have implications on decoding 
-generalization, transfer learning and performance in cognitively
-challenging scenarios.
-We choose the dataset which contains recordings from multiple protocols
-on Error-related Potentials (ErrP). It will allow us to test
-the transfer learning in real application in addition to theoretical
-investigations and simulations.
+In this study, we explore both popular approaches to classify ERPs
+under the challenges of temporal variability. 
+Specifically, we compare waveform vs covariance features,
+the benefits of their combination and the impact of Riemannian geometry vs Euclidean geometry.
+We simulate two scenarios. Firstly, we simulate the high temporal
+variability by artificially introducing the latency jitter in the 
+trial extraction. Secondly, we transfer the classifier between
+different yet related protocols.
+
+
+%In this study we explore the robustness of covariance-derived features
+%in decoding ERPs to the various perturbations of latency
+%and compare them with more traditional temporal waveform features.
+
+%Although one can use the values from covariance matrix
+%directly as features for the classifier \cite{tomioka_classifying_2007}, Euclidean geometry is not 
+%suitable to describe their relationships \cite{arsigny_geometric_2007}. 
+%Since they are 
+%Symmetric Positive Definite matrices (SPD),
+%they are better characterized in terms of Riemannian geometry.
+
+%It shows promising
+%results in generalization across sessions \cite{barachant_classification_2013}
+%and transfer learning across subjects \cite{zanini_transfer_2018}.
+
 
 
 \section{Materials and Methods}
 \label{sec:methods}
 \subsection{Data}
-We use the data from \cite{iturrate_latency_2014-1}. 6 subjects participated in three ErrP experiments.
-The experiments had different devices and setups where the device discretely moved in space
-in order to reach the target. The probability of the device to make an erroneous
-movement was approximately 30\%. The time between consecutive movements was randomly sampled
-from the range [1.7, 4.0] s. Participants observed and evaluated the movement
-as correct or erroneous without an overt response.
+We choose the dataset which contains recordings from multiple protocols
+on Error-related Potentials (ErrP) \cite{iturrate_latency_2014-1}. It will allow us to test
+the transfer learning in real application in addition to theoretical
+investigations and simulations.
+In all the protocols participants observed a discrete movement of an object
+on the visual display or in physical space.
+They evaluated the movement as correct if the object moved towards a marked target or erroneous 
+otherwise. The evaluation was made without an overt behavioral response.
 
 In Experiment 1 ($E_1$) a one-dimensional space with 9 positions was shown on a visual display and
 a blue square was moving towards a red square (target). In Experiment 3 ($E_3$) participant were seated
@@ -206,13 +209,25 @@ The panel contained squared marks in a regular grit forming a two-dimensional sp
 The robotic arm moved behind the marks up, down, left or right 
 towards one of the corners (targets).
 Experiment 2 ($E_2$) was a virtual version of Experiment 3 in which marks and the robotic arm
-were rendered on a visual display. Further details about the protocols can be found in \cite{iturrate_latency_2014-1}.
+were rendered on a visual display.
+The probability of the erroneous
+movement was approximately 30\%. The time between consecutive movements was randomly sampled
+from the range [1.7, 4.0] s. 
+6 subjects participated in three ErrP experiments.
+Further details about the protocols can be found in \cite{iturrate_latency_2014-1}.
 
-The three experiments have a similar ERP waveform (Figure \ref{fig:FCz}). The amplitudes are not statistically
-different between them, however, there is a systematic latency
-difference, previously estimated to be:
+The three experiments have a similar ERP waveform 
+while having systematic difference in latency (Figure \ref{fig:FCz}).
+The latency differences are previously estimated to be:
 60.42 $\pm$ 25.24, 108.85 $\pm$ 22.86 and 41.02 $\pm$ 12.95 ms
 for the $E_1 E_2$, $E_1 E_3$, and $E_2 E_3$ pair of experiments.
+A linear classifier
+based on waveform features cannot cope with it when trained and applied
+on different datasets, the performance drops to random level
+for considerable latency shifts. However, a simple correction of 
+the latency allows to recover the performance up to the level
+obtained within the single protocol dataset  \cite{iturrate_latency_2014-1}.
+
 
 \begin{figure}[!t]
     \includegraphics[trim={0cm 0cm 0 0cm},clip,width=\columnwidth]{../images/FCz_all_diff_Topo_compact.pdf}
@@ -222,7 +237,52 @@ Error and Correct trials at FCz channel. Topographies show the amplitudes for P3
 \end{figure}
 
 
-\subsection{A brief introduction into Riemannian geometry in BCI}
+\subsection{Covariance-based features}
+
+Different sources of neural activity project at the scalp with a specific distribution.
+Spatial covariances between EEG channels capture the shape of this distribution
+and the strength of the activity averaged across the time-window of interest.
+Covariance matrices can be built in different ways.
+The simple estimation is done as follows: 
+$\mathbf{C} = \frac{1}{s}\mathbf{X}^T\mathbf{X}$ where $\mathbf{X} \in \mathbb{R}^{s \times n}$ is a multichannel
+EEG epoch with $n$ channels and $s$ time points.
+In case of ERPs, this estimation looses the precise temporal dynamics of the waveform.
+In order to compensate for this, a modified version of covariance matrices
+was suggested \cite{congedo_new_2013}. 
+The epoch $\mathbf{X}$ is augmented with a template $\mathbf{T} \in \mathbb{R}^{s \times k}$
+along the channel dimension to build a super epoch
+$\mathbf{Z} = [\mathbf{X} \quad \mathbf{T}] \in \mathbb{R}^{s \times (n + k)}$.
+The covariance matrix estimated on the augmented signal becomes:
+\begin{equation}
+    \mathbf{C}_\mathbf{T} = \frac{1}{s}\mathbf{Z}^T\mathbf{Z} = \frac{1}{s}
+    \pmatrix{
+        \mathbf{X}^T\mathbf{X} & \mathbf{X}^T\mathbf{T} \cr
+        \mathbf{T}^T\mathbf{X} & \mathbf{T}^T\mathbf{T} 
+    }
+    \label{eq:templ}
+\end{equation}
+
+The covariance between $\mathbf{X}$ and $\mathbf{T}$ allows to capture the temporal dynamics
+specifically with the relation to the template $\mathbf{T}$. In the context of ERP
+experiments, the template is typically an average ERP of one or several classes.
+In this case it will reflect how similar a particular epoch is to the average ERP.
+Thus the covariance matrix $\mathbf{C}_\mathbf{T}$ contains the combination
+of two sources of information: covariances between channels and the similarity to the template waveform.
+
+In high dimensional settings a simple Maximum Likelihood Estimator of covariance matrix is not
+stable so a regularization is often applied. In this paper we use
+a shrinkage as described in \cite{chen_shrinkage_2010}.
+
+\subsubsection{Riemannian geometry on covariance matrices}
+The natural choice to treat covariance matrices is to vectorize them
+and use as a feature vector for further processing and classification.
+But most vector-based algorithms assume a Euclidean space, such as PCA \cite{hyvarinen_independent_2001}.
+Euclidean geometry is not well suited for SPD matrices due to various
+drawbacks \cite{arsigny_geometric_2007}, so they can be characterized 
+better with Riemannian geometry while improving the performance.
+For example, a popular approach relying on covariance matrices for feature extraction,
+namely, Common Spatial Patterns (CSP) can be improved within Riemannian framework \cite{barachant_common_2010}.
+
 Riemannian geometry is the branch of mathematics that studies
 smooth spaces locally behaving like a Euclidean space.
 The main feature of Riemannian space consists in the way the distances are defined.
@@ -233,18 +293,6 @@ Although the surface is is a 2-dimensional space,
 we cannot directly compute the distance between 2 remote points.
 However, around each point distances can be locally approximated
 with $\mathbb{R}^2$ Euclidean space.
-
-Different sources of neural activity project at the scalp with a specific distribution.
-Spatial covariances between EEG channels capture the shape of this distribution
-and the strength of the activity averaged across the time-window of interest.
-The natural choice to treat covariance matrices is to vectorize them
-and use as a feature vector for further processing and classification.
-But most vector-based algorithms assume a Euclidean space, such as PCA \cite{hyvarinen_independent_2001}.
-Euclidean geometry is not well suited for SPD matrices due to various
-drawbacks \cite{arsigny_geometric_2007}, so they can be characterized 
-better with Riemannian geometry while improving the performance.
-For example, a popular approach relying on covariance matrices for feature extraction,
-namely, Common Spatial Patterns (CSP) can be improved within Riemannian framework \cite{barachant_common_2010}.
 
 One of the simple ways to introduce the benefits from Riemannian geometry
 into classification of covariance matrices is to use their projection
@@ -270,46 +318,12 @@ The approach requires two steps:
         where $\textrm{logm}$ denotes the logarithm of a matrix \cite{berger_panoramic_2003}.
 \end{enumerate}
 
-\subsection{Covariance matrix estimation}
-
-Covariance matrices can be built in different ways.
-The simple estimation is done as follows: 
-$\mathbf{C} = \frac{1}{s}\mathbf{X}^T\mathbf{X}$ where $\mathbf{X} \in \mathbb{R}^{s \times n}$ is a multichannel
-EEG window with $n$ channels and $s$ time points.
-In case of ERPs, this estimation looses the precise temporal dynamics of the waveform.
-In order to compensate for this, an modified version of covariance matrices
-was suggested. The window $\mathbf{X}$ is augmented with a template $\mathbf{T} \in \mathbb{R}^{s \times k}$
-along the channel dimension to build $\mathbf{Z} = [\mathbf{X} \quad \mathbf{T}] \in \mathbb{R}^{s \times (n + k)}$.
-The covariance matrix estimated on the augmented signal becomes:
-\begin{equation}
-    \mathbf{C}_\mathbf{T} = \frac{1}{s}\mathbf{Z}^T\mathbf{Z} = \frac{1}{s}
-    \pmatrix{
-        \mathbf{X}^T\mathbf{X} & \mathbf{X}^T\mathbf{T} \cr
-        \mathbf{T}^T\mathbf{X} & \mathbf{T}^T\mathbf{T} 
-    }
-    \label{eq:templ}
-\end{equation}
-
-The covariance between $\mathbf{X}$ and $\mathbf{T}$ allows to capture the temporal dynamics
-specifically with the relation to the template $\mathbf{T}$. In the context of ERP
-experiments, the template is typically an average ERP of one or several classes.
-In this case it will reflect how similar a particular epoch is to the average ERP.
-Thus the covariance matrix $\mathbf{C}_\mathbf{T}$ contains the combination
-of two sources of information: covariances between channels and the similarity to the template waveform.
-
-In high dimensional settings a simple Maximum Likelihood Estimator of covariance matrix is not
-stable so a regularization is often applied. In this paper we use
-a shrinkage as described in \cite{chen_shrinkage_2010}.
-
-\subsection{EEG features}
+\subsection{Data processing and feature extraction}
 All the EEG was filtered with Butterworth band-pass filter of order 4 within the band [1, 10] Hz
 forward and backward and downsampled from 512 Hz to 128 Hz. Then the signal is spatially
 filtered with common-average-reference (CAR). Further feature extraction is done
 from time window of [200, 1000] ms after the event. We explore and compare different sets
 of features, which include ERP waveform and covariance matrices.
-Covariance matrices lie in the space of SPD matrices which is more naturally 
-described in term of Riemannian geometry. In this paper we test both raw
-and transformed covariance matrices.
 
 For the classification we prepare the following features:
 \begin{enumerate}
@@ -319,13 +333,15 @@ For the classification we prepare the following features:
     \item Covariance matrices computed with shrinkage to improve stability bringing 136 features.
     \item Projections of shrinkaged covariance matrices on a tangent space. The projection reference
         point is the geometric mean estimated from the training data.
-    \item Before estimating covariance matrices we augmented the epochs with the averaged ERPs
-        of each class along the channels axis. ERPs were estimated from the training data. 
-        Then we estimate covariance matrices with shrinkage. Such an augmentation produces
+    \item Shrinkaged covariance matrices estimated on super epochs augmented with the averaged ERPs
+        of each class. ERPs were estimated from the training data.
+        Such an augmentation produces
         a high number of features (1176) so we decided to preselect 8 channels which
         drastically reduces the number of features to 300. We automatically choose
         the channels according to the mean Fisher score across all time points \cite{duda_pattern_2001}.
 \end{enumerate}
+
+\subsection{Feature evaluation}
 
 For the binary classification we apply penalized logistic
 regression (PLR) because it is robust to overfiting and outliers \cite{parra_recipes_2005},
@@ -334,10 +350,9 @@ while keeping the temporal relationships for splitting.
 Additionally, we standardize all features by z-score with mean and standard deviation
 obtained from the training data because we use a regularized classifier \cite{hastie_elements_2009}.
 Since the classes
-are not balanced in ErrP protocols, we measure the performance by area under the ROC curve (AUC) \cite{bradley_use_1997}.
+are not balanced in ErrP protocols, we measure the performance by area under the ROC curve (AUC) 
+\cite{bradley_use_1997}.
 
-
-\subsection{Temporal robustness}
 As a baseline we estimate the performance of all features in a leave-one-run-out cross validation.
 Together with the hyperparameter optimization the overall procedure is structured as
 a nested cross validation.
@@ -345,21 +360,19 @@ High performance with a linear classifier suggests that ERP waveforms are consis
 across single trials. In order to test the robustness of different features
 to the temporal variability we introduce a random jitter to the time window
 for all the epochs. The amount of jitter is sampled from a uniform distribution.
-Three gradual jitter levels are [-50, 50], [-100, 100] and [-200, 200] ms.
-The performance is validated in a leave-one-run-out cross validation.
+Three gradual jitter levels are [-50, 50], [-100, 100], [-200, 200] and [-300, 300] ms.
 This procedure is repeated on all three experiments.
 
 The three experiments proved to evoke similar-shaped ErrP with a 
 systematic shift in latency. Without any fine-tuning and additional
 transformation we transfer classifiers within the same subject
 between experiments. Classifier trained on one experiment
-is tested on the other two, providing a single AUC number.
+is tested on the other two, providing a single AUC number per pair.
 This procedure is repeated for all pairs of the experiments and all feature sets.
 
 
 \section{Results}
 \label{sec:results}
-
 
 \subsection{Performance on the jitter-free dataset}
 
@@ -371,8 +384,9 @@ This procedure is repeated for all pairs of the experiments and all feature sets
 \label{fig:jitter}
 \end{figure}
 
-First of all, we compare the classifiers performance on the original datasets. There
-is a statistically significant difference across classifiers obtained with two-way repeated
+First of all, we can see that all classifiers perform well on the
+original datasets without jitter \ref{fig:jitter}. The average AUC across subjects is between 75 and 90.
+There is a statistically significant difference across classifiers obtained with two-way repeated
 measures ANOVA, the factors being the classifier and the experiments (p-value $< 0.001$
 (0.000186)). By breaking down the difference into pair-wise comparison with post-hoc
 two-way repeated measures ANOVA, we can see that the difference is mainly driven by
@@ -423,23 +437,33 @@ and the ones transformed with Riemannian geometry.
 \section{Discussion}
 \label{sec:discussion}
 
+Classification of ERPs provides a basis for various BCI applications.
 Decoding of ERPs can be done with a high accuracy in restrictive conditions.
 The stimuli must be clear and simple to recognize
 in order to evoke a standardized EEG waveform. And the classifier
-must be fine-tuned for the given ERP waveform. Even a small
+must be fine-tuned for the given ERP waveform.
+In order to ensure a high performance of a system the algorithm
+is trained individually for each subject and each experiment.
+Although there is a limited number of ERP types used in practice,
+it is not always feasible to train a single classifier. 
+Even a small
 modification such as a transition from 1D to 2D scenario or virtual to physical
 can influence the ERP shape and latency. More complex stimuli
 could also lead to a higher variability of ERP within the same protocol.
+Latency is mainly affected by the stimulus evaluation time \cite{kutas_augmenting_1977}.
 
 In this study we verified the robustness of different types of features
 to the variability and shifts in latency using real ErrP data.
 It is done in two ways: through artificial latency jitter
 and classifier transfer between different protocols.
+For our experiments we selected a dataset obtained on three
+different ErrP protocols. The ERPs within each protocol are
+well aligned but had a latency differences between them.
 
-Both types of features spatial covariances and the ERP waveform
+We showed that both types of features spatial covariances and the ERP waveform
 carry sufficient information for high performance above 75 AUC points.
 Waveform features contain more discriminant power on the original datasets.
-So the method which combines both channel covariances and the waveform
+But the method which combines both channel covariances and the waveform
 provides the highest performance.
 However, when challenged with the shifts in latency
 spatial covariance features are more robust.
@@ -448,24 +472,14 @@ the combination of features leads to an intermediate
 performance as compared to simple sets of features.
 
 These findings can lead to improved performance in ERP-based BCI. 
-Scenarios with ambiguous and variable stimuli which require more time
-for assessment can benefit from temporally robust covariance features.
+There is no solution that can fit all application cases.
+It is not always feasible to assess the temporal variability
+of ERPs, so a new experimental scenarios both approaches
+could be evaluated.
+However, experiments with ambiguous and complex stimuli which require more time
+for evaluation could benefit from temporally robust covariance features.
 Better generalization capabilities can also allow a more efficient and quick
-calibration procedure in case of the transfer between similar protocols.
-
-
-\section{Conclusion}
-Classification of ERPs provides a basis for various BCI applications.
-In order to ensure a high performance of a system the algorithm
-is trained individually for each subject and each experiment.
-Although there is a limited number of ERP types used in practice,
-it is not always feasible to train a single classifier. 
-Even slight changes in the protocol can lead to latency shifts
-and variance of ERPs. We showed that features based on 
-spatial covariances are more stable in this case. They can
-improve the classification of the data with high temporal variability
-and can be directly used for transfer to similar protocols
-without additional calibration.
+calibration procedure in case of the transfer between related protocols.
 
 
 \section*{References}
