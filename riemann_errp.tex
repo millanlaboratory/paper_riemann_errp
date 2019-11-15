@@ -184,7 +184,12 @@ with the covariances between single trial and average ERP
 of one of the classes \cite{congedo_new_2013,barachant_plug&play_2014}.
 Under ERP latency variability challenge, however, 
 augmented covariance matrices may have the same issue as
-waveforms. Thus, we need to consider simple channel-based covariance matrices.
+waveforms.
+The impact of latency shifts and jitter have previously been studied
+for augmented covariance matrices \cite{barachant_plug&play_2014}
+and the performance dropped quickly for small delays of 60 ms.
+Thus, we need to consider simple channel-based covariance matrices.
+
 Covariance matrices can be used directly \cite{tomioka_classifying_2007} as features, 
 although it is not optimal. It is shown that treating them under Riemannian geometry framework
 provides better performance \cite{barachant_classification_2013, zanini_transfer_2018}.
