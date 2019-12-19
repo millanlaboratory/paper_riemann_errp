@@ -54,16 +54,41 @@
 
 \title[]{Stability of spatial covariance in ERPs with high temporal variability}
 
-\author{R Aydarkhanov$^1$,
-M Uscumlic$^2$,
-R Chavarriaga$^3$,
-J d R Millan$^4$}
+\author{Ruslan Aydarkhanov$^1$,
+Marija Marija U\v{s}\'{c}umli\'{c}$^2$,
+Ricardo Chavarriaga$^3$,
+Jos\'e del R Mill\'an$^{4,5,6}$}
 
 
-\address{$^1$EPFL, Switzerland}
-\address{$^2$EPFL, Switzerland}
-\address{$^3$EPFL, Switzerland}
-\address{$^4$TU Austin, USA}
+\address{$^1$Medical Image Processing Laboratory,
+Center for Neuroprosthetics,
+Interschool Institute of Bioengineering,
+\'Ecole Polytechnique F\'ed\'erale de Lausanne (EPFL),
+Campus Biotech H4,
+1202 Geneva,
+Switzerland}
+\address{$^2$Nissan International SA,
+La Pi\`ece 12,
+1180 Rolle,
+Switzerland
+}
+\address{$^3$Zürich University of Applied Sciences, ZHAW,
+InIT Institut of Applied Information Technology,
+Ob. Kirchgasse 2,
+8400 Winterthur,
+Switzerland}
+\address{$^4$Dept. of Electrical and Computer Engineering,
+The University of Texas at Austin,
+Austin, TX 78712,
+USA}
+\address{$^5$Dept. of Neurology,
+The University of Texas at Austin,
+Austin, TX 78712,
+USA}
+\address{$^6$\'Ecole Polytechnique F\'ed\'erale de Lausanne (EPFL),
+Campus Biotech H4,
+1202 Geneva,
+ Switzerland}
 \ead{ruslan.aydarkhanov@epfl.ch}
 \vspace{10pt}
 %\begin{indented}
@@ -71,7 +96,7 @@ J d R Millan$^4$}
 %\end{indented}
 
 \begin{abstract}
-Event Related Potentials (ERPs) are widely used in Brain Computer
+\textit{Objective.} Event Related Potentials (ERPs) are widely used in Brain Computer
 Interfaces (BCI) by providing a cognitive response to external stimuli.
 ERPs are characterized and typically decoded through a fixed set of
 components with particular amplitude and latency. 
@@ -83,11 +108,20 @@ waveform features cannot be applied for challenging tasks and
 to generalize across various experimental protocols.
 Signal features based on spatial covariances can potentially overcome
 the latency jitter and delays since they aggregate the information
-across time. We compared the performance stability 
+across time.
+\textit{Approach.} We compared the performance stability 
 of waveform and covariance-based features as well as their combination
-in simulated scenarios such as classifier transfer 
-and increased single-trial latency variability.
-Our findings suggest that covariance-based features
+in simulated scenarios. We investigate two case: 1) classifier transfer 
+between 3 experiments with Error Related Potentials
+and 2) the performance robustness to the added latency jitter.
+\textit{Main results.} The features based on spatial covariances
+provide a stable performance with a minor decline
+under jitter levels of up to $\pm$ 300 ms,
+whereas the decoding performance with waveform features
+quickly drops from 85 to 55 AUC. The classifier transfer also
+resulted in a significantly more stable performance with covariance-based
+features.
+\textit{Significance.} Our findings suggest that covariance-based features
 can be used to: 1) classify more reliably ERPs
 with higher intrinsic variability in more challenging real-life applications
 and 2) generalize across related experimental protocols.
@@ -96,7 +130,7 @@ and 2) generalize across related experimental protocols.
 %
 % Uncomment for keywords
 \vspace{2pc}
-\noindent{\it Keywords\/}: Brain-computer interfaces, Electroencephalography, Riemannian geometry
+\noindent{\it Keywords\/}: Brain-computer interfaces, Electroencephalography, Event Related Potentials, Covariance, Riemannian geometry
 %
 % Uncomment for Submitted to journal title message
 %\submitto{\JPA}
@@ -120,13 +154,14 @@ and 2) generalize across related experimental protocols.
 \section{Introduction}
 \label{sec:intro}
 
-Diverse cognitive responses to external stimuli --
+Diverse cognitive responses to external stimuli --,
 error detection, object recognition etc. -- reflected as distinguishable modulations of
-the Event-Related Potential (ERP) waveforms provide tremendous opportunities for brain computer interfacing (BCI). 
+the Event-Related Potential (ERP) waveforms, provide tremendous opportunities for brain computer interfacing (BCI). 
 As an illustration, when an error committed by
 the user or machine is observed, an Error-Related Potential (ErrP) is elicited
-and can be used to correct it. Upon each occurrence of such an event the perception 
-and the evaluation processes take variable period of time.
+and can be used to correct it \cite{chavarriaga_adaptation_2010}.
+Upon each occurrence of such an event, the perception 
+and the evaluation processes take variable periods of time.
 We investigate the robustness of various ERP properties to these temporal
 variations for the purpose of improving decoding performance in BCI applications.
 %The most widely used ERPs in BCI include P300 and ErrP.
@@ -245,15 +280,15 @@ The dataset that we chose was specifically recorded to address
 the issue of systematic latency shift in transfer learning \cite{iturrate_latency_2014-1}.
 This dataset contains recordings from multiple protocols
 on Error-related Potentials (ErrP). It will allow us to test
-the transfer learning in real application in addition to theoretical
+the transfer learning in real application, in addition to theoretical
 investigations and simulations.
 In all the protocols participants observed a discrete movement of an object
 on the visual display or in physical space.
 They evaluated the movement as correct if the object moved towards a marked target or erroneous 
 otherwise. The evaluation was made mentally without an overt behavioral response.
 
-In Experiment 1 ($E_1$) a one-dimensional space with 9 positions was shown on a visual display and
-a blue square was moving towards a red square (target). In Experiment 3 ($E_3$) participant were seated
+In Experiment 1 ($E_1$), a one-dimensional space with 9 positions was shown on a visual display and
+a blue square was moving towards a red square (target). In Experiment 3 ($E_3$), participants were seated
 in front of a robotic arm, 2 meters away with a transparent panel in between.
 The panel contained squared marks in a regular grit forming a two-dimensional space.
 The robotic arm moved behind the marks up, down, left or right 
@@ -268,25 +303,26 @@ Further details about the protocols can be found in \cite{iturrate_latency_2014-
 
 The three experiments yielded a similar grand average ERP waveform 
 while having systematic differences in latency (Figure \ref{fig:FCz}).
-The latency differences are previously estimated to be:
+The latency differences were previously estimated to be:
 60.42 $\pm$ 25.24, 108.85 $\pm$ 22.86 and 41.02 $\pm$ 12.95 ms
 for the $E_1 E_2$, $E_1 E_3$, and $E_2 E_3$ pair of experiments.
 A linear classifier
 based on waveform features cannot cope with it when trained and applied
 on different datasets, the performance drops to random level
 for considerable latency shifts. However, in an offline analysis
-when the latency shift can be estimated
+when the latency shift can be estimated,
 a simple correction of latency allows to recover the performance up to the level
 obtained within the single protocol dataset \cite{iturrate_latency_2014-1}.
 
 
 \begin{figure}[!t]
+    \centering
     \includegraphics[trim={0cm 0cm 0 0cm},clip,width=0.5\columnwidth]{../images/FCz_all_diff_Topo_compact.pdf}
     \includegraphics[trim={0cm 0cm 0 0cm},clip,width=0.5\columnwidth]{../images/FCz_all_diff_noise300.pdf}
 \caption{Grand averages for all three experiments. Left: The waveforms show the difference between
 Error and Correct trials at FCz channel. Topographies show the amplitudes for P3 and N4 peaks.
 Right: Waveform differences between Error and Correct trials at FCz channel after adding jitter with uniform noise in
-range [-300, 300] ms.}
+the range [-300, 300] ms.}
 \label{fig:FCz}
 \end{figure}
 
@@ -331,6 +367,8 @@ a shrinkage as described in \cite{chen_shrinkage_2010}.
 The natural choice to treat covariance matrices is to vectorize them
 and use as a feature vector for further processing and classification.
 But most vector-based algorithms assume a Euclidean space, such as PCA \cite{hyvarinen_independent_2001}.
+Covariance matrices are always
+Symmetric and Positive semi-Definite (SPD), however,
 Euclidean geometry is not well suited for SPD matrices due to various
 drawbacks \cite{arsigny_geometric_2007}, so they can be characterized 
 better with Riemannian geometry while improving the performance.
@@ -374,35 +412,36 @@ The approach requires two steps:
 \end{enumerate}
 
 \subsection{Data processing and feature extraction}
-All the EEG was filtered with Butterworth band-pass filter of order 4 within the band [1, 10] Hz
-forward and backward and downsampled from 512 Hz to 128 Hz. Then the signal is spatially
-filtered with common-average-reference (CAR). Further feature extraction is done
+All the EEG was filtered with a Butterworth band-pass filter of order 4 within the band [1, 10] Hz
+forward and backward and downsampled from 512 Hz to 128 Hz. Then the signal was spatially
+filtered with common-average-reference (CAR). Further feature extraction was done
 in the time window of [200, 1000] ms after the event (correct or erroneous movement).
 We explore and compare different sets
 of features, which include ERP waveform and covariance matrices.
 
-For the classification we prepare the following features (Figure \ref{fig:Features}):
+For the classification we compute the following features (Figure \ref{fig:Features}):
 \begin{enumerate}[label=F\arabic*]
     \item \textbf{Waveform}. Waveform of the ERP epoch $\mathbf{X}$, i.e. the amplitude at all channels and time points. Due to high
-        dimensionality (1648) we apply PCA and keep components with highest eigenvalue
+        dimensionality (1648) we applied PCA and keep components with highest eigenvalue
         which explain 90\% of the variance. It resulted into 60 +/- 8 features.
-    \item \textbf{Euclid}. Covariance matrices $\mathbf{C}$ computed with shrinkage to improve stability bringing 136 features.
+    \item \textbf{Euclid}. Covariance matrices $\mathbf{C}$ computed with shrinkage to improve stability, yielding 136 features.
     \item \textbf{Riemann}. Projections of shrinkaged covariance matrices on a tangent space $\mathbf{S}$. The projection reference
-        point is the geometric mean estimated from the training data.
-        The projection does not affect the dimensionality yielding 136 features (see the equation\ref{eq:logm}).
+        point was the geometric mean estimated from the training data.
+        The projection does not affect the dimensionality, yielding 136 features (see the equation\ref{eq:logm}).
     \item \textbf{Riemann+}. Shrinkaged covariance matrices $\mathbf{C_Z}$ estimated on super epochs augmented with the averaged ERPs
         of each class $\mathbf{Z}$. ERPs were estimated from the training data.
-        Such an augmentation produces
-        a high number of features (1176) so we decided to preselect 8 channels which
-        drastically reduces the number of features to 300. We automatically choose
+        Such an augmentation produced
+        a high number of features (1176), so we decided to preselect 8 channels which
+        drastically reduced the number of features to 300. We automatically chose
         the channels according to the mean Fisher score across all time points \cite{duda_pattern_2001}.
-        The covariance matrices $\mathbf{C_Z}$ are projected on a corresponding tangent space $\mathbf{S_Z}$ .
+        The covariance matrices $\mathbf{C_Z}$ were projected on a corresponding tangent space $\mathbf{S_Z}$ .
 \end{enumerate}
 
 
 \begin{figure}[!t]
+    \centering
     \includegraphics[trim={0cm 0cm 0 0cm},clip,width=0.5\columnwidth]{../images/Features2.pdf}
-\caption{Steps of feature construction for each EEG epoch. The following operations are used:
+\caption{Steps of feature construction for each EEG epoch. The following operations were used:
     Vect - vectorization of unique values (only upper triangle for SPD matrices), Cov - estimation of covariance matrix with shrinkage,
 Select Channels - selection of 8 most discriminant channels,
 Augment - augmentation of the epoch with grand average of erroneous and correct classes,
@@ -413,32 +452,33 @@ Logm - logarithmic mapping on the tangent space.}
 \subsection{Classification performance evaluation with respect to the latency}
 
 To classify erroneous vs correct trials we applied penalized logistic regression (PLR), robust to overfiting and
-outliers \cite{parra_recipes_2005}. The regularization parameter is chosen by 4-fold cross-validation in the
-training dataset. The data are split to preserve the
+outliers \cite{parra_recipes_2005}. The regularization parameter was chosen by 4-fold cross-validation in the
+training dataset. The data was split to preserve the
 temporal relationships (non-randomized trials).
 
-Additionally, we standardize all features by z-score with mean and standard deviation
-obtained from the training data because we use a regularized classifier \cite{hastie_elements_2009}.
+Additionally, we standardized all features by z-score with mean and standard deviation
+obtained from the training data because we used a regularized classifier \cite{hastie_elements_2009}.
 Since the classes
-are not balanced in ErrP protocols, we measure the performance by area under the ROC curve (AUC) 
+were not balanced in ErrP protocols, we measured the performance by area under the ROC curve (AUC) 
 \cite{bradley_use_1997}.
 
 
 \subsubsection*{Baseline performance.} 
-As a baseline we estimate the performance of all features in a leave-one-run-out cross validation.
-Together with the hyperparameter optimization the overall procedure is structured as
+As a baseline we estimated the performance of all features in a leave-one-run-out cross validation.
+Together with the hyperparameter optimization the overall procedure was structured as
 a nested cross validation.
 %\cite{iturrate_latency_2014-1}
 
 
 \subsubsection*{Latency jitter.} 
-The authors of the used dataset reported high decoding performance of AUC $> 80$ with a linear classifier.
+The authors of the used dataset reported high decoding performance of AUC $> 80$ with a linear classifier
+when trained and applied within the same protocol.
 This suggests that ERP waveforms are consistent across single trials.
 In order to investigate the robustness of different features
-to the temporal variability we introduce a random jitter to the time window
-for all data which included both training and test epochs. The amount of jitter is sampled from a uniform distribution.
-Three gradual jitter levels are [-50, 50], [-100, 100], [-200, 200] and [-300, 300] ms.
-This procedure is repeated on all three experiments.
+to the temporal variability we introduced a random jitter to the time window
+for all data which included both training and test epochs. The amount of jitter was sampled from a uniform distribution.
+Three gradual jitter levels were [-50, 50], [-100, 100], [-200, 200] and [-300, 300] ms.
+This procedure was repeated on all three experiments.
 
 \subsubsection*{Classifier transfer.}
 The three experiments proved to evoke similar ErrP waveforms on grand averages with a 
@@ -455,7 +495,8 @@ This procedure is repeated for all pairs of the experiments and all feature sets
 \subsection{Baseline performance}
 
 \begin{figure}[!t]
-    \includegraphics[trim={0cm 1.5cm 0 2.2cm},clip,width=0.6\columnwidth]{../images/RiemannERP_Jitter_Summary.png}
+    \centering
+    \includegraphics[trim={0cm 1.5cm 0 2.2cm},clip,width=0.8\columnwidth]{../images/RiemannERP_Jitter_Summary.png}
 \caption{Robustness of the features to simulated temporal jitter.
     Each figure represents one of the experiments. The data shows
     AUC as mean and standard deviation across all subjects.}
@@ -477,7 +518,7 @@ as opposed to Euclidean geometry (p-value $= 0.03$).
 
 \subsection{Robustness to latency jitter}
 
-We introduce different levels of latency jitter to compare the temporal robustness
+We introduced different levels of latency jitter to compare the temporal robustness
 of different feature sets.
 The performance change for different levels of jitter is shown on Figure \ref{fig:jitter}.
 The overall trend is a reduction in performance with the increase in temporal jitter for all features.
@@ -508,11 +549,11 @@ latency differences are 60 and 100 ms.
 In contrast to the within-dataset performance, the ``Riemann+'' approach which
 combines both types of information
 does not provide best results when transferring between protocols.
-In the meantime covariance matrices are more robust
+Interestingly, covariance matrices are more robust
 especially when the latency shift is bigger.
 There is a statistically significant difference across features
 for all training/test pairs, with p-values $< 0.0001$ (one-way ANOVA).
-Interestingly, there is no difference in performance between simple covariance matrices
+Furthermore, there is no difference in performance between simple covariance matrices
 and the ones transformed with Riemannian geometry.
 
 
@@ -525,7 +566,7 @@ and the ones transformed with Riemannian geometry.
 \label{fig:transfer}
 \end{figure*}
 
-\section{Discussion}
+\section{Discussion and Conclusion}
 \label{sec:discussion}
 
 Various studies show high 
@@ -535,7 +576,7 @@ Stimuli diversity or any other change in experimental conditions, however,
 can affect ERP waveforms and degrade classification performance.
 %So it is not always feasible to train a single classifier 
 %even within a single paradigm, like ErrP or P300.
-On one side, as we have seen through the set of experiments on error monitoring
+On one side, as we have seen through the set of experiments on error monitoring,
 a small modification such as a transition from 1D to 2D scenario
 or virtual to physical can influence the ERP latency.
 On the other side, more complex stimuli
@@ -557,10 +598,10 @@ and 2) classifier transfer between protocols where ErrP latency shift is observe
 
 We showed that both types of features -- spatial covariances and the ERP waveform --
 carry sufficient information for high decoding performance (AUC $> 75$) for all three experiments.
-Waveform features outperform covariance features yet their combination
+Waveform features outperform covariance features, yet their combination
 by the means of the augmenting covariance matrices results
 in the highest performance. This can be explained by complementary 
-information seen in the spatio-temporal relations between channels.
+information contained in the spatio-temporal relations between channels.
 %contain more discriminant power on the original dataset
 %since they produce higher classification performance in all three experiments.
 %But the method which combines both channel covariances and the waveform
@@ -594,16 +635,17 @@ diverse stimuli may require different levels of cognitive
 effort reflected in the ERP latency \cite{kutas_augmenting_1977}.
 %Latency is mainly affected by the stimulus evaluation time \cite{kutas_augmenting_1977}.
 Moreover, there is a requirement on efficient calibration and 
-a quick switch to a new setup.
+a quick switch to a new setup, which could be fulfilled with the approach presented here. 
 
-\textcolor{red}{to be extended\ldots}
-%without recalibrating the BCI system.
+\ack
 
+The authors thank Nissan Motor Co. Ltd for supporting
+this work.
 
 \section*{References}
 
 \bibliographystyle{unsrt}
-\bibliography{RiemannERP_paper.bib}
+\bibliography{RiemannERP_paper}
 
 \end{document}
 
