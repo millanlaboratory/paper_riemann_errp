@@ -42,6 +42,7 @@
 \pdfminorversion=4
 
 \documentclass[12pt]{iopart}
+\usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage{amssymb}
 \usepackage{enumitem}
@@ -72,7 +73,7 @@ La Pi\`ece 12,
 1180 Rolle,
 Switzerland
 }
-\address{$^3$Zürich University of Applied Sciences, ZHAW,
+\address{$^3$Zurich University of Applied Sciences, ZHAW,
 InIT Institut of Applied Information Technology,
 Ob. Kirchgasse 2,
 8400 Winterthur,
@@ -154,16 +155,22 @@ and 2) generalize across related experimental protocols.
 \section{Introduction}
 \label{sec:intro}
 
-Diverse cognitive responses to external stimuli --,
-error detection, object recognition etc. -- reflected as distinguishable modulations of
-the Event-Related Potential (ERP) waveforms, provide tremendous opportunities for brain computer interfacing (BCI). 
-As an illustration, when an error committed by
-the user or machine is observed, an Error-Related Potential (ErrP) is elicited
+%Diverse cognitive responses to external stimuli --,
+%error detection, object recognition etc. -- reflected as distinguishable modulations of
+%the Event-Related Potential (ERP) waveforms, 
+Humans are constantly engaged in evaluating sensory percepts 
+that are critical to achieve their goals. Such decision
+making processes give rise to event-related potentials (ERP),
+whose real-time detection
+provide tremendous opportunities for brain-computer interfacing (BCI). 
+As an illustration, when
+the user observes an error committed by
+the system she is interacting with, an Error-Related Potential (ErrP) is elicited
 and can be used to correct it \cite{chavarriaga_adaptation_2010}.
 Upon each occurrence of such an event, the perception 
 and the evaluation processes take variable periods of time.
 We investigate the robustness of various ERP properties to these temporal
-variations for the purpose of improving decoding performance in BCI applications.
+variations for the purpose of improving their decoding performance in BCI applications.
 %The most widely used ERPs in BCI include P300 and ErrP.
 %P300 is elicited upon presentation of a rare stimuli in the oddball paradigm
 %and it is associated with stimulus categorization whereas
@@ -198,9 +205,10 @@ The early components are triggered by a sensory stimulation
 whereas the late components reflect cognitive processing.
 ERPs can be successfully detected in various paradigms under controlled conditions
 using preprocessed time signal of the EEG channel activity over the time-window of interest \cite{blankertz_single-trial_2011}.
-When facing real world conditions, our cognitive processing may be challenged
-by complex and diverse stimuli and dynamic environment.
-As a result, the later ERP components are more prone to latency variability \cite{arico_evaluation_2013}
+When facing real world conditions, our cognitive processes may be challenged
+by complex and diverse stimuli 
+as well as the fact that the environment is dynamic.
+As a result, the later ERP components are more prone to latency variability \cite{arico_evaluation_2013},
 which compromises the decoding performance.
 %Thus, the interaction
 %protocol needs to be carefully adjusted and the decoding
@@ -216,23 +224,25 @@ features emphasize the pair-wise interaction
 between channels and the total variance of single channels.
 We hypothesize that these features may be a suitable choice
 to address the challenge of decoding ERPs with high latency variability 
-inherent to real world BCI application.
-Typically, it is advisable to augment the matrix
-with the covariances between single trial and average ERP
-of one of the classes because the temporal ERP dynamics is considered to be
+inherent to real world BCI applications.
+Typically, it is advisable to augment the covariance features estimated
+on a single trial with the covariances between channels
+in single trial and channels in average ERP
+of one of the classes because it allows to keep the temporal information 
+of ERP dynamics which is considered to be
 a valuable source of discriminant information \cite{congedo_new_2013,barachant_plug&play_2014}.
-Under ERP latency variability challenge, however, 
+Under ERP latency variability, however, 
 augmented covariance matrices may have the same issue as
 waveforms.
 The impact of latency shifts and jitter have previously been studied
 for augmented covariance matrices \cite{barachant_plug&play_2014}
-and the performance dropped quickly for short delays of 60 ms.
-Thus, we need to consider simple channel-based covariance matrices.
+and the performance dropped quickly for delays as short as 60 ms.
+An alternative is to consider simple channel-based covariance matrices.
 
 Covariance matrices can be used directly \cite{tomioka_classifying_2007} as features, 
 although Euclidean geometry does not properly capture the relationship between them.
-It is shown that treating them under Riemannian geometry framework
-which will be briefly introduced in the section \nameref{sec:methods}
+It has been shown that treating them under Riemannian geometry framework,
+which will be briefly introduced in the section \nameref{sec:methods},
 provides better performance \cite{barachant_classification_2013, zanini_transfer_2018}.
 
 %It has proven to provide performance compared to other frequently used
@@ -243,16 +253,17 @@ In order to investigate this hypothesis,
 we specifically compare waveform \textit{vs} covariance features,
 the benefits of their combination
 and the impact of Riemannian \textit{vs} Euclidean geometry under two scenarios.
-This analysis is done on the data from error-monitoring experiments.
+This analysis is done on the data from error-monitoring experiments \cite{iturrate_latency_2014-1}.
 Firstly, we simulate the high temporal
-variability by artificially introducing the latency jitter when extracting the ErrP trials.
-This corresponds to the expected ERP variability when facing diverse stimuli in
+variability by artificially introducing a latency jitter when extracting the ErrP trials.
+This corresponds to the expected ERP variability when facing stimuli in
 natural environment.
 Secondly, we study the robustness of the mentioned features
 to the systematic latency shifts between the training and test data. 
 Such scenario corresponds to the classifiers transfer between
-related ERP protocols. Latency-robust features may be used to reduce BCI calibration time
-for new protocols as requested by the end users.
+related ERP protocols. Latency-robust features may be used to reduce
+BCI calibration time by direct transfer of the available classifier
+to new protocols.
 
 
 %In this study we explore the robustness of covariance-derived features
@@ -503,7 +514,7 @@ This procedure is repeated for all pairs of the experiments and all feature sets
 \label{fig:jitter}
 \end{figure}
 
-First of all, we can see that all features perform well on the
+First, we can see that all features perform well on the
 original datasets without jitter (Figure \ref{fig:jitter}). The average AUC across subjects is between 75 and 90.
 There is a statistically significant difference across feature sets obtained with two-way repeated
 measures ANOVA, the factors being the feature and the experiments (p-value $< 0.001$
@@ -569,8 +580,8 @@ and the ones transformed with Riemannian geometry.
 \section{Discussion and Conclusion}
 \label{sec:discussion}
 
-Various studies show high 
-performance  ERP-based BCI in controlled experimental conditions.
+Various studies have shown high 
+performance of ERP-based BCIs in controlled experimental conditions.
 %when the classifiers are trained individually for each subject.
 Stimuli diversity or any other change in experimental conditions, however,
 can affect ERP waveforms and degrade classification performance.
@@ -591,7 +602,7 @@ could lead to a higher temporal variability of ERP within the same protocol  \ci
 In this study we investigated the robustness of different types of features
 to the variability and systematic shifts in latency using real ErrP data.
 We conducted two analyses: 1) simulated ErrP temporal variability (latency jitter)
-and 2) classifier transfer between protocols where ErrP latency shift is observed.
+and 2) classifier transfer between protocols where an ErrP latency shift is observed.
 %For our experiments we selected a dataset obtained on three
 %different ErrP protocols. The ERPs within each protocol are
 %well aligned but have latency differences between them.
@@ -609,10 +620,11 @@ information contained in the spatio-temporal relations between channels.
 When facing ERP latency shifts or jitter, however,
 spatial covariance features are more robust in contrast to waveform features.
 Our results indicate that classification based on waveform features approach a chance level
-for jitter levels above 200 ms or latency differences
+for jitter levels above 200 ms, or latency differences
 between experiments that exceed 100 ms.
 %In both scenarios with classifier transfer and latency jitter
-The features combining both information sources lead to an intermediate
+The features combining both information sources do not provide 
+the best performance, it rather leads to an intermediate
 performance as compared to simpler feature sets.
 This is expected as it is constrained by limitation
 of the waveform features. 
@@ -645,6 +657,7 @@ this work.
 \section*{References}
 
 \bibliographystyle{unsrt}
+%\bibliographystyle{iopart-num}
 \bibliography{RiemannERP_paper}
 
 \end{document}
