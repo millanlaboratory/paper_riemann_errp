@@ -58,7 +58,8 @@
 \author{Ruslan Aydarkhanov$^1$,
 Marija U\v{s}\'{c}umli\'{c}$^2$,
 Ricardo Chavarriaga$^3$,
-Jos\'e del R Mill\'an$^{4,5,6}$}
+Lucian Gheorghe$^4$,
+Jos\'e del R Mill\'an$^{5,6,7}$}
 
 
 \address{$^1$Medical Image Processing Laboratory,
@@ -78,15 +79,20 @@ InIT Institut of Applied Information Technology,
 Ob. Kirchgasse 2,
 8400 Winterthur,
 Switzerland}
-\address{$^4$Dept. of Electrical and Computer Engineering,
+
+\address{$^4$
+Advanced Materials and Processing Laboratory, Nissan Research Center, Nissan Motors Co. LTD, 1,
+Natsushima, Yokosuka-shi, Kanagawa-ken, 237-8523, Japan
+}
+\address{$^5$Dept. of Electrical and Computer Engineering,
 The University of Texas at Austin,
 Austin, TX 78712,
 USA}
-\address{$^5$Dept. of Neurology,
+\address{$^6$Dept. of Neurology,
 The University of Texas at Austin,
 Austin, TX 78712,
 USA}
-\address{$^6$\'Ecole Polytechnique F\'ed\'erale de Lausanne (EPFL),
+\address{$^7$\'Ecole Polytechnique F\'ed\'erale de Lausanne (EPFL),
 Campus Biotech H4,
 1202 Geneva,
  Switzerland}
@@ -97,29 +103,30 @@ Campus Biotech H4,
 %\end{indented}
 
 \begin{abstract}
-\textit{Objective.} Event Related Potentials (ERPs) are widely used in Brain Computer
-Interfaces (BCI) by providing a cognitive response to external stimuli.
+\textit{Objective.} Event Related Potentials (ERPs)
+reflecting cognitive response to external stimuli,
+are widely used in Brain Computer Interfaces (BCI).
 ERPs are characterized and typically decoded through a fixed set of
 components with particular amplitude and latency. 
 However, the classical methods which rely on waveform features
 achieve a high decoding performance only with standardized
 and well aligned single trials. Since the amplitude and latency
 are sensitive to the experimental conditions,
-waveform features cannot be applied for challenging tasks and
+waveform features cannot be successfully applied for challenging tasks or
 to generalize across various experimental protocols.
-Signal features based on spatial covariances can potentially overcome
+Features based on spatial covariances across channels can potentially overcome
 the latency jitter and delays since they aggregate the information
 across time.
 \textit{Approach.} We compared the performance stability 
 of waveform and covariance-based features as well as their combination
-in simulated scenarios. We investigate two case: 1) classifier transfer 
+in simulated scenarios. We investigate two cases: 1) classifier transfer 
 between 3 experiments with Error Related Potentials
 and 2) the performance robustness to the added latency jitter.
 \textit{Main results.} The features based on spatial covariances
 provide a stable performance with a minor decline
 under jitter levels of up to $\pm$ 300 ms,
 whereas the decoding performance with waveform features
-quickly drops from 85 to 55 AUC. The classifier transfer also
+quickly drops from 0.85 to 0.55 AUC. The classifier transfer also
 resulted in a significantly more stable performance with covariance-based
 features.
 \textit{Significance.} Our findings suggest that covariance-based features
@@ -160,17 +167,19 @@ and 2) generalize across related experimental protocols.
 %the Event-Related Potential (ERP) waveforms, 
 Humans are constantly engaged in evaluating sensory percepts 
 that are critical to achieve their goals. Such decision
-making processes give rise to event-related potentials (ERP),
-whose real-time detection
+making processes give rise to
+brain responses that can be measured as electroencephalography (EEG)
+event-related potentials (ERP).
+Real-time detection of these ERPs
 provide tremendous opportunities for brain-computer interfacing (BCI). 
 As an illustration, when
 the user observes an error committed by
 the system she is interacting with, an Error-Related Potential (ErrP) is elicited
-and can be used to correct it \cite{chavarriaga_adaptation_2010}.
+and its detection can be used to correct it \cite{chavarriaga_adaptation_2010}.
 Upon each occurrence of such an event, the perception 
 and the evaluation processes take variable periods of time.
 We investigate the robustness of various ERP properties to these temporal
-variations for the purpose of improving their decoding performance in BCI applications.
+variations for the purpose of improving their decoding performance for BCI applications.
 %The most widely used ERPs in BCI include P300 and ErrP.
 %P300 is elicited upon presentation of a rare stimuli in the oddball paradigm
 %and it is associated with stimulus categorization whereas
@@ -228,7 +237,7 @@ inherent to real world BCI applications.
 Typically, it is advisable to augment the covariance features estimated
 on a single trial with the covariances between channels
 in single trial and channels in average ERP
-of one of the classes because it allows to keep the temporal information 
+of one of the classes. The rationale for this, is that it allows to keep the temporal information 
 of ERP dynamics which is considered to be
 a valuable source of discriminant information \cite{congedo_new_2013,barachant_plug&play_2014}.
 Under ERP latency variability, however, 
@@ -239,9 +248,9 @@ for augmented covariance matrices \cite{barachant_plug&play_2014}
 and the performance dropped quickly for delays as short as 60 ms.
 An alternative is to consider simple channel-based covariance matrices.
 
-Covariance matrices can be used directly \cite{tomioka_classifying_2007} as features, 
+Covariance matrices can be used directly as features \cite{tomioka_classifying_2007}, 
 although Euclidean geometry does not properly capture the relationship between them.
-It has been shown that treating them under Riemannian geometry framework,
+It has been shown that treating them under the Riemannian geometry framework,
 which will be briefly introduced in the section \nameref{sec:methods},
 provides better performance \cite{barachant_classification_2013, zanini_transfer_2018}.
 
@@ -255,7 +264,8 @@ the benefits of their combination
 and the impact of Riemannian \textit{vs} Euclidean geometry under two scenarios.
 This analysis is done on the data from error-monitoring experiments \cite{iturrate_latency_2014-1}.
 Firstly, we simulate the high temporal
-variability by artificially introducing a latency jitter when extracting the ErrP trials.
+variability by artificially introducing a latency jitter 
+on ErrP trials with a low temporal variability.
 This corresponds to the expected ERP variability when facing stimuli in
 natural environment.
 Secondly, we study the robustness of the mentioned features
@@ -322,14 +332,15 @@ based on waveform features cannot cope with it when trained and applied
 on different datasets, the performance drops to random level
 for considerable latency shifts. However, in an offline analysis
 when the latency shift can be estimated,
+e.g. by using a few labelled trials of the new experiment,
 a simple correction of latency allows to recover the performance up to the level
 obtained within the single protocol dataset \cite{iturrate_latency_2014-1}.
 
 
 \begin{figure}[!t]
     \centering
-    \includegraphics[trim={0cm 0cm 0 0cm},clip,width=0.5\columnwidth]{../images/FCz_all_diff_Topo_compact.pdf}
-    \includegraphics[trim={0cm 0cm 0 0cm},clip,width=0.5\columnwidth]{../images/FCz_all_diff_noise300.pdf}
+    \includegraphics[trim={0cm 0cm 0 0cm},clip,width=0.49\columnwidth]{../images/FCz_all_diff_Topo_compact.pdf}
+    \includegraphics[trim={0cm 0cm 0 0cm},clip,width=0.49\columnwidth]{../images/FCz_all_diff_noise300.pdf}
 \caption{Grand averages for all three experiments. Left: The waveforms show the difference between
 Error and Correct trials at FCz channel. Topographies show the amplitudes for P3 and N4 peaks.
 Right: Waveform differences between Error and Correct trials at FCz channel after adding jitter with uniform noise in
